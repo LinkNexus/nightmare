@@ -1,6 +1,5 @@
 using System.Collections.ObjectModel;
 using System.Data;
-using Nightmare.Models;
 using Terminal.Gui;
 
 namespace Nightmare.UI;

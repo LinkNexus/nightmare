@@ -1,4 +1,4 @@
-using Nightmare.Models;
+using Nightmare.UI.Left;
 using Terminal.Gui;
 
 namespace Nightmare.UI;

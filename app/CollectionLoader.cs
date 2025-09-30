@@ -1,5 +1,4 @@
 using System.Text.Json;
-using Nightmare.Models;
 
 namespace Nightmare;
 

@@ -7,12 +7,13 @@ public class Program
 {
   static void Main()
   {
-    var loader = CollectionLoader.Instance;
+    var config = CollectionLoader.Instance.GetConfig();
+    config.SetRequestsIdentifiers();
     Application.Init();
 
     try
     {
-      Application.Run(new MainWindow(loader.GetConfig()));
+      Application.Run(new MainWindow(config));
     }
     finally
     {
