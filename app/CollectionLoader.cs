@@ -5,11 +5,25 @@ namespace Nightmare;
 
 public class CollectionLoader
 {
+
+  static CollectionLoader? instance = null;
+
   public const string CONFIG_FILE = "nightmare.json";
   const int SEARCH_DEPTH = 5;
 
-  static string? configPath = null;
-  static Collection config = null;
+  string? configPath = null;
+  Collection? config = null;
+
+  private CollectionLoader() { }
+
+  public static CollectionLoader Instance
+  {
+    get
+    {
+      instance ??= new CollectionLoader();
+      return instance;
+    }
+  }
 
   static string FindConfigFile(string cwd, int currentDepth = 0)
   {
@@ -30,7 +44,7 @@ public class CollectionLoader
       throw new CollectionFileNotFoundException();
   }
 
-  public static string GetConfigPath(string? cwd = null)
+  public string GetConfigPath(string? cwd = null)
   {
     if (configPath is null)
     {
@@ -47,25 +61,25 @@ public class CollectionLoader
     File.WriteAllText(
         path,
   @"
-          {
-            ""name"": ""Nightmare Collection"",
-            ""profiles"": {
-              ""default"": {
-                ""data"": {
-                  ""host"": ""https://test.com""
-                }
-              }
-            }
-          }");
+{
+  ""name"": ""Nightmare Collection"",
+  ""profiles"": {
+    ""default"": {
+      ""data"": {
+        ""host"": ""https://test.com""
+      }
+    }
+  }
+}");
 
     return path;
   }
 
-  public static Collection GetConfig(string? cwd = null)
+  public Collection GetConfig(string? cwd = null)
   {
     if (config is null)
     {
-      string? path = null;
+      string? path;
 
       try
       {
@@ -87,6 +101,9 @@ public class CollectionLoader
         config = JsonSerializer.Deserialize<Collection>(openStream, options);
       }
     }
+
+    if (config is null)
+      throw new Exception("Failed to load configuration.");
 
     return config;
   }

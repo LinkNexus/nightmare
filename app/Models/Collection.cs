@@ -4,7 +4,10 @@ public class Collection
 {
   public string Name { get; set; } = "Nightmare Requests";
 
-  public Dictionary<string, Profile> Profiles { get; set; }
+  public Dictionary<string, Profile> Profiles { get; set; } = new()
+  {
+    ["default"] = new Profile { Default = true }
+  };
 }
 
 public class Profile

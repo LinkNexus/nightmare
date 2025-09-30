@@ -4,48 +4,102 @@ using Nightmare;
 
 public class CollectionLoaderTest
 {
-  [Fact]
-  public void ShouldThrowCollectionFileNotFoundException()
+
+  static void ResetInstance()
   {
-    Assert.Throws<CollectionFileNotFoundException>(
-        () => CollectionLoader.GetConfigPath()
+    var instanceField = typeof(CollectionLoader).GetField("instance", System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.NonPublic);
+    instanceField?.SetValue(null, null);
+  }
+
+  static void UseCollectionLoaderInstance(Action<CollectionLoader> callback)
+  {
+    ResetInstance();
+
+    try
+    {
+      callback(CollectionLoader.Instance);
+    }
+    finally
+    {
+      ResetInstance();
+    }
+  }
+
+  static void ExecInsideTempDir(Action<string, CollectionLoader> callback)
+  {
+    UseCollectionLoaderInstance(
+        (loader) =>
+        {
+          var tempDir = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
+          Directory.CreateDirectory(tempDir);
+          try
+          {
+            callback(tempDir, loader);
+          }
+          finally
+          {
+            Directory.Delete(tempDir, true);
+          }
+        }
     );
   }
 
-  static void ExecInsideTempDir(Action<string> callback)
+  [Fact]
+  public void GetConfigPath_ShouldThrowException_WhenFileNotFound()
   {
-    var tempDir = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
-    Directory.CreateDirectory(tempDir);
-
-    callback(tempDir);
-
-    Directory.Delete(tempDir, true);
+    UseCollectionLoaderInstance(
+        (loader) =>
+        {
+          Assert.Throws<CollectionFileNotFoundException>(
+              () => loader.GetConfigPath()
+          );
+        }
+    );
   }
 
   [Fact]
-  public void ShouldFindConfigFileInDirectory()
+  public void GetConfigPath_ShouldFindConfigFileInDirectory()
   {
     ExecInsideTempDir(
-        (tempDir) =>
+        (tempDir, loader) =>
         {
           var configFilePath = Path.Combine(tempDir, CollectionLoader.CONFIG_FILE);
           File.WriteAllText(configFilePath, "{}");
 
-          var foundPath = CollectionLoader.GetConfigPath(tempDir);
+          var foundPath = loader.GetConfigPath(tempDir);
           Assert.Equal(configFilePath, foundPath);
         }
     );
   }
 
   [Fact]
-  public void ShouldCreateDefaultCollectionFile()
+  public void GetConfigPath_ShouldFindConfigFileInParentDirectory()
   {
     ExecInsideTempDir(
-        (tempDir) =>
+        (tempDir, loader) =>
         {
-          var config = CollectionLoader.GetConfig(tempDir);
+          var configFilePath = Path.Combine(tempDir, CollectionLoader.CONFIG_FILE);
+          File.WriteAllText(configFilePath, "{}");
+
+          var subDir = Path.Combine(tempDir, "subdir");
+          Directory.CreateDirectory(subDir);
+
+          var foundPath = loader.GetConfigPath(subDir);
+          Assert.Equal(configFilePath, foundPath);
+        }
+    );
+  }
+
+  [Fact]
+  public void GetConfig_ShouldCreateDefaultConfig_WhenFileNotFound()
+  {
+    ExecInsideTempDir(
+        (tempDir, loader) =>
+        {
+          var config = loader.GetConfig(tempDir);
           Assert.True(File.Exists(Path.Combine(tempDir, CollectionLoader.CONFIG_FILE)));
           Assert.NotNull(config);
+          Assert.Equal("Nightmare Collection", config.Name);
         }
     );
   }
