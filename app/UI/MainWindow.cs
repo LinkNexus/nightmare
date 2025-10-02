@@ -1,4 +1,5 @@
 using Nightmare.UI.Left;
+using Nightmare.UI.Right;
 using Terminal.Gui;
 
 namespace Nightmare.UI;
@@ -10,7 +11,8 @@ public class MainWindow : Window
   string selectedProfile;
   SelectProfileDialog selectProfileDialog;
   LeftSide leftSide;
-  string selectedRequestId;
+  RightSide rightSide;
+  RequestOrFolder selectedRequest;
 
   public MainWindow(Collection collection)
   {
@@ -23,11 +25,12 @@ public class MainWindow : Window
       ?? collection.Profiles.Keys.First();
 
     leftSide = new(collection, selectedProfile);
+    rightSide = new(leftSide);
 
     SetProfilesDialog();
     SetKeyBindings();
 
-    Add(leftSide);
+    Add(leftSide, rightSide);
   }
 
   void SetProfilesDialog()

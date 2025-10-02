@@ -8,6 +8,7 @@ public class RequestsSection : FrameView
   Collection collection;
   string selectedProfile;
   TreeView<RequestOrFolder> treeView;
+  public event Action<RequestOrFolder> OnRequestSelected;
 
   public RequestsSection(View profilesSection, Collection collection, string selectedProfile)
   {
@@ -33,6 +34,13 @@ public class RequestsSection : FrameView
     };
 
     treeView.AddObjects(collection.Requests.Values);
+
+    treeView.SelectionChanged += (_, args) =>
+    {
+      var selected = treeView.SelectedObject;
+      if (selected is not null && selected.Requests is null)
+        OnRequestSelected?.Invoke(selected);
+    };
 
     Add(treeView);
   }

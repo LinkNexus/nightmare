@@ -9,6 +9,7 @@ public class LeftSide : View
   string selectedProfile;
   RequestsSection requestsSection;
   Collection collection;
+  public event Action<RequestOrFolder> OnRequestSelected;
 
   public LeftSide(Collection collection, string selectedProfile)
   {
@@ -39,6 +40,8 @@ public class LeftSide : View
   void CreateRequestsSection()
   {
     requestsSection = new(profilesSection, collection, selectedProfile);
+
+    requestsSection.OnRequestSelected += OnRequestSelected;
     Add(requestsSection);
   }
 
@@ -46,6 +49,7 @@ public class LeftSide : View
   {
     selectedProfile = profileName;
     profilesSection.Text = selectedProfile;
+    requestsSection.SelectedProfile = selectedProfile;
   }
 
 }
