@@ -13,7 +13,6 @@ public class LeftSide : View
   public LeftSide(Collection collection, string selectedProfile)
   {
     X = 0;
-    Y = 1;
     Height = Dim.Fill();
     Width = Dim.Percent(25);
 
@@ -29,7 +28,7 @@ public class LeftSide : View
     {
       X = 0,
       Width = Dim.Fill(),
-      Height = Dim.Percent(10),
+      Height = Dim.Auto(),
       Title = "Profiles (p)",
       Text = selectedProfile
     };

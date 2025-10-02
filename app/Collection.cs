@@ -16,7 +16,10 @@ public class Collection
   public void SetRequestsIdentifiers()
   {
     foreach (var kvp in Requests)
-      kvp.Value.SetIdentifers(kvp.Key);
+    {
+      kvp.Value.Name ??= kvp.Key;
+      kvp.Value.SetNameAndIdentifers(kvp.Key);
+    }
   }
 }
 
@@ -40,16 +43,22 @@ public class RequestOrFolder
 
   public Dictionary<string, RequestOrFolder>? Requests { get; set; } = null;
 
-  public void SetIdentifers(string baseName)
+  public void SetNameAndIdentifers(string baseName)
   {
     if (Requests is not null)
     {
       foreach (var kvp in Requests)
       {
-        kvp.Value.SetIdentifers(string.Format("{0}.{1}", baseName, kvp.Key));
+        kvp.Value.Name ??= kvp.Key;
+        kvp.Value.SetNameAndIdentifers(string.Format("{0}.{1}", baseName, kvp.Key));
       }
     }
     else Identifier = baseName;
+  }
+
+  public override string ToString()
+  {
+    return Name;
   }
 }
 

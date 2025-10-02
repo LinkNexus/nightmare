@@ -10,6 +10,7 @@ public class MainWindow : Window
   string selectedProfile;
   SelectProfileDialog selectProfileDialog;
   LeftSide leftSide;
+  string selectedRequestId;
 
   public MainWindow(Collection collection)
   {
@@ -20,7 +21,6 @@ public class MainWindow : Window
     selectedProfile = collection.Profiles
       .FirstOrDefault(p => p.Value.Default).Key
       ?? collection.Profiles.Keys.First();
-
 
     leftSide = new(collection, selectedProfile);
 

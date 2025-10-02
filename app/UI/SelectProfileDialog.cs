@@ -25,8 +25,8 @@ public class SelectProfileDialog : Dialog
     this.selectedProfile = selectedProfile;
     this.profiles = profiles;
     Title = "Select Profile";
-    Width = Dim.Percent(50);
-    Height = Dim.Percent(60);
+    Width = Dim.Percent(65);
+    Height = Dim.Percent(80);
 
     SetProfileslist();
     SetDataTable();
@@ -55,18 +55,15 @@ public class SelectProfileDialog : Dialog
   {
     profilesListFrame = new()
     {
-
       Title = "Available Profiles",
       Height = Dim.Percent(35),
-      Width = Dim.Fill() - 2,
-      X = 1,
-      Y = 1
+      Width = Dim.Fill(),
     };
 
     profilesList = new()
     {
-      Height = Dim.Fill() - 2,
-      Width = Dim.Fill() - 2,
+      Height = Dim.Fill(),
+      Width = Dim.Fill(),
     };
     profilesList.SetSource(new ObservableCollection<string>(profiles.Keys));
     profilesList.SelectedItem = profilesList.Source.ToList().IndexOf(selectedProfile);
@@ -104,18 +101,16 @@ public class SelectProfileDialog : Dialog
   {
     dataTableFrame = new()
     {
-      Height = Dim.Percent(50),
+      Height = Dim.Fill(1),
       Title = "Profile Data",
-      Width = Dim.Fill() - 2,
-      Y = Pos.Bottom(profilesListFrame) + 1,
-      X = 1
+      Width = Dim.Fill(),
+      Y = Pos.Bottom(profilesListFrame),
     };
 
     dataTableView = new()
     {
       Height = Dim.Fill(),
-      // Height = Dim.Fill() - 2,
-      Width = Dim.Fill() - 2,
+      Width = Dim.Fill(),
     };
 
     dataTable.Columns.Add("Keys");

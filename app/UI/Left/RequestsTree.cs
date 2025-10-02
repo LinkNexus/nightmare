@@ -9,8 +9,11 @@ public class RequestsTree : TreeBuilder<RequestOrFolder>
   {
   }
 
-  public override IEnumerable<RequestOrFolder> GetChildren(RequestOrFolder forObject)
+  public override IEnumerable<RequestOrFolder> GetChildren(RequestOrFolder requestOrFolder)
   {
-    throw new NotImplementedException();
+    if (requestOrFolder.Requests is not null)
+      return requestOrFolder.Requests.Values;
+    else
+      return [];
   }
 }
