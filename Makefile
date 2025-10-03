@@ -5,4 +5,4 @@ test:
 	dotnet test 
 
 build:
-	dotnet build --project app
+	dotnet build app

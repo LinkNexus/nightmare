@@ -5,26 +5,25 @@ namespace Nightmare.UI.Left;
 public class RequestsSection : FrameView
 {
 
+  public TreeView<RequestOrFolder> tree;
   Collection collection;
-  string selectedProfile;
-  TreeView<RequestOrFolder> treeView;
+
   public event Action<RequestOrFolder> OnRequestSelected;
 
-  public RequestsSection(View profilesSection, Collection collection, string selectedProfile)
+  public RequestsSection(FrameView profilesSection, Collection collection)
   {
-    this.collection = collection;
-    this.selectedProfile = selectedProfile;
     Y = Pos.Bottom(profilesSection);
     Height = Dim.Fill();
     Width = Dim.Fill();
-    Title = "Requests (r)";
+    Title = "Requests";
+    this.collection = collection;
 
-    ImplementTreeView();
+    ImplementTree();
   }
 
-  void ImplementTreeView()
+  void ImplementTree()
   {
-    treeView = new()
+    tree = new()
     {
       X = 0,
       Y = 0,
@@ -33,16 +32,16 @@ public class RequestsSection : FrameView
       TreeBuilder = new RequestsTree()
     };
 
-    treeView.AddObjects(collection.Requests.Values);
-
-    treeView.SelectionChanged += (_, args) =>
+    tree.AddObjects(collection.Requests.Values);
+    tree.SelectionChanged += (_, args) =>
     {
-      var selected = treeView.SelectedObject;
+      var selected = tree.SelectedObject;
+
       if (selected is not null && selected.Requests is null)
         OnRequestSelected?.Invoke(selected);
     };
 
-    Add(treeView);
+    Add(tree);
   }
 
 }

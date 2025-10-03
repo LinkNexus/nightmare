@@ -6,7 +6,6 @@ namespace Nightmare.UI;
 
 public class MainWindow : Window
 {
-
   Collection collection;
   string selectedProfile;
   SelectProfileDialog selectProfileDialog;
@@ -24,13 +23,22 @@ public class MainWindow : Window
       .FirstOrDefault(p => p.Value.Default).Key
       ?? collection.Profiles.Keys.First();
 
-    leftSide = new(collection, selectedProfile);
+    SetLeftSide();
     rightSide = new(leftSide);
 
     SetProfilesDialog();
     SetKeyBindings();
 
     Add(leftSide, rightSide);
+  }
+
+  void SetLeftSide()
+  {
+    leftSide = new(collection, selectedProfile);
+    leftSide.RequestsSection.OnRequestSelected += (req) =>
+    {
+      MessageBox.Query(50, 7, "Request Selected", req.Name, "Ok");
+    };
   }
 
   void SetProfilesDialog()

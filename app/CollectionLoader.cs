@@ -93,11 +93,7 @@ public class CollectionLoader
       if (path is not null)
       {
         using FileStream openStream = File.OpenRead(path);
-        var options = new JsonSerializerOptions
-        {
-          PropertyNameCaseInsensitive = true
-        };
-        config = JsonSerializer.Deserialize<Collection>(openStream, options);
+        config = JsonSerializer.Deserialize(openStream, JsonContext.Default.Collection);
       }
     }
 

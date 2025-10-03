@@ -4,12 +4,12 @@ namespace Nightmare.UI.Left;
 
 public class LeftSide : View
 {
-
   FrameView profilesSection;
   string selectedProfile;
-  RequestsSection requestsSection;
   Collection collection;
+  TreeView<RequestOrFolder> requestsTree;
   public event Action<RequestOrFolder> OnRequestSelected;
+  public RequestsSection RequestsSection;
 
   public LeftSide(Collection collection, string selectedProfile)
   {
@@ -39,17 +39,13 @@ public class LeftSide : View
 
   void CreateRequestsSection()
   {
-    requestsSection = new(profilesSection, collection, selectedProfile);
-
-    requestsSection.OnRequestSelected += OnRequestSelected;
-    Add(requestsSection);
+    RequestsSection = new(profilesSection, collection);
+    Add(RequestsSection);
   }
 
   public void SelectedProfileChanged(string profileName)
   {
     selectedProfile = profileName;
     profilesSection.Text = selectedProfile;
-    requestsSection.SelectedProfile = selectedProfile;
   }
-
 }
