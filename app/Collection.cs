@@ -37,7 +37,7 @@ public class RequestOrFolder
 
   public string Name { get; set; }
 
-  public string Method { get; set; }
+  public string Method { get; set; } = "GET";
 
   public string Url { get; set; }
 

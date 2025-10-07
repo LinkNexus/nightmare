@@ -19,17 +19,20 @@ public class MainWindow : Window
     Title = collection.Name;
     BorderStyle = LineStyle.Double;
 
+    ColorScheme = new()
+    {
+      Normal = new Terminal.Gui.Attribute(Color.White, Color.Black)
+    };
+
     selectedProfile = collection.Profiles
       .FirstOrDefault(p => p.Value.Default).Key
       ?? collection.Profiles.Keys.First();
 
     SetLeftSide();
-    rightSide = new(leftSide);
+    SetRightSide();
 
     SetProfilesDialog();
     SetKeyBindings();
-
-    Add(leftSide, rightSide);
   }
 
   void SetLeftSide()
@@ -37,8 +40,15 @@ public class MainWindow : Window
     leftSide = new(collection, selectedProfile);
     leftSide.RequestsSection.OnRequestSelected += (req) =>
     {
-      MessageBox.Query(50, 7, "Request Selected", req.Name, "Ok");
+      rightSide.RecipeSection.SelectRequestChanged(req);
     };
+    Add(leftSide);
+  }
+
+  void SetRightSide()
+  {
+    rightSide = new(leftSide, selectedRequest);
+    Add(rightSide);
   }
 
   void SetProfilesDialog()

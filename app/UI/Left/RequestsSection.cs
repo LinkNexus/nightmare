@@ -4,7 +4,6 @@ namespace Nightmare.UI.Left;
 
 public class RequestsSection : FrameView
 {
-
   public TreeView<RequestOrFolder> tree;
   Collection collection;
 
@@ -33,12 +32,21 @@ public class RequestsSection : FrameView
     };
 
     tree.AddObjects(collection.Requests.Values);
+
     tree.SelectionChanged += (_, args) =>
     {
       var selected = tree.SelectedObject;
 
       if (selected is not null && selected.Requests is null)
-        OnRequestSelected?.Invoke(selected);
+      {
+        if (selected.Url is null)
+        {
+          MessageBox.ErrorQuery("Error", "Request URL is null", "Ok");
+          tree.SelectedObject = ;
+        }
+        else
+          OnRequestSelected?.Invoke(selected);
+      }
     };
 
     Add(tree);

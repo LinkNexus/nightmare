@@ -6,21 +6,15 @@ namespace Nightmare.UI.Right;
 
 public class RightSide : View
 {
+  public RecipeSection RecipeSection;
 
-  RecipeSection recipeSection;
-
-  public RightSide(LeftSide leftSide)
+  public RightSide(LeftSide leftSide, RequestOrFolder selectedRequest)
   {
     X = Pos.Right(leftSide);
     Height = Dim.Fill();
     Width = Dim.Percent(75);
 
-    CreateRecipeSection();
-  }
-
-  void CreateRecipeSection()
-  {
-    recipeSection = new();
-    Add(recipeSection);
+    RecipeSection = new(selectedRequest);
+    Add(RecipeSection);
   }
 }
