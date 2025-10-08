@@ -6,6 +6,7 @@ public class RequestsSection : FrameView
 {
   public TreeView<RequestOrFolder> tree;
   Collection collection;
+  public RequestOrFolder selectedRequest;
 
   public event Action<RequestOrFolder> OnRequestSelected;
 
@@ -41,11 +42,14 @@ public class RequestsSection : FrameView
       {
         if (selected.Url is null)
         {
-          MessageBox.ErrorQuery("Error", "Request URL is null", "Ok");
-          tree.SelectedObject = ;
+          MessageBox.ErrorQuery("Error", "The request url is not defined", "Ok");
+          tree.SelectedObject = selectedRequest;
         }
         else
+        {
           OnRequestSelected?.Invoke(selected);
+          selectedRequest = selected;
+        }
       }
     };
 

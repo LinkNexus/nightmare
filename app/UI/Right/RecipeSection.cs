@@ -38,7 +38,9 @@ public class RecipeSection : FrameView
 
     UrlLabel = new()
     {
-      Width = Dim.Percent(30)
+      X = Pos.Right(MethodLabel) + 1,
+      Width = Dim.Fill(MethodLabel.Width + 1),
+      Height = Dim.Fill()
     };
 
     if (selectedRequest is not null)
@@ -54,6 +56,7 @@ public class RecipeSection : FrameView
   public void SelectRequestChanged(RequestOrFolder request)
   {
     MethodLabel.Title = request.Method;
+    UrlLabel.Title = request.Url;
   }
 
 }
